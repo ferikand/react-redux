@@ -3,6 +3,7 @@ import { deleteBook, toggleFavorite } from "../../redux/books/actionCreators.js"
 import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs"
 import {
   selectAuthorFilter,
+  selectOnlyFavorite,
   selectTitleFilter,
 } from "../../redux/slices/filterSlice.js"
 import "./BookList.css"
@@ -11,6 +12,7 @@ const BookList = () => {
   const books = useSelector((state) => state.books)
   const titleFilter = useSelector(selectTitleFilter)
   const authorFilter = useSelector(selectAuthorFilter)
+  const onlyFavoriteFilter = useSelector(selectOnlyFavorite)
   const dispatch = useDispatch()
 
   const handleToggleFavorite = (id) => {
@@ -30,7 +32,9 @@ const BookList = () => {
       .toLowerCase()
       .includes(authorFilter.toLowerCase())
 
-    return matchesTitle && matchesAuthor
+    const matchesOnlyFavorite = !onlyFavoriteFilter || book.isFavorite
+
+    return matchesTitle && matchesAuthor && matchesOnlyFavorite
   })
 
   return (
